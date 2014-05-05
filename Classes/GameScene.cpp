@@ -134,6 +134,25 @@ void GameScene::__showResult()
     CCMessageBox("game over", "tip");
     isOver = true;
     __createRandomColor();
+    /* 显示结果面板 */
+    CCNode *resultNode = CCNode::create();
+    resultNode->setScale(m_fScaleFactor);
+    CCSprite *resultPanel = CCSprite::create("images/game_over_bg.png");
+    resultNode->addChild(resultPanel);
+    CCLabelTTF *pScoreLabel = CCLabelTTF::create(scoreLabel->getString(), "fonts/relay-black.ttf", 20);
+    CCLabelTTF *topScoreLabel = CCLabelTTF::create("", "fonts/relay-black.ttf", 20);
+    resultNode->addChild(pScoreLabel);
+    resultNode->addChild(topScoreLabel);
+    CCMenuItemSprite *restartItem = CCMenuItemSprite::create(SPRITE("images/play.png"), SPRITE("images/play_select.png"));
+    CCMenuItemSprite *menuItem = CCMenuItemSprite::create(SPRITE("images/menu.png"), SPRITE("images/menu_select.png"));
+    CCMenu *menu = CCMenu::create(restartItem,menuItem,NULL);
+    menu->ignoreAnchorPointForPosition(false);
+    menu->setAnchorPoint(ccp(0.5f,0.0f));
+    resultNode->addChild(menu);
+    restartItem->setPosition(ccp(0, -50));
+    menuItem->setPosition(ccp(100, -50));
+    addChild(resultNode);
+    resultNode->setPosition(VisibleRect::center());
 }
 
 void GameScene::__makeQuestion()
