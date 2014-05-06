@@ -21,6 +21,8 @@ enum{
 };
 
 #define PP_GAME_OVER_TIME 1.0f
+#define PP_LABEL_TIME 0.3f
+
 void GameScene::onEnter()
 {
     BaseLayer::onEnter();
@@ -130,8 +132,8 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
     CCNode *item = (CCNode*)pSender;
     if( ( result == true && item->getTag() == kRightMenu ) || (result==false&&item->getTag()==kWrongMenu) ){
         /* 移动问题的位置 */
-        CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
-        CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+        CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+        CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
         question->runAction(CCEaseBackInOut::create(moveQ));
         answer->runAction(CCSequence::create(
                             CCEaseBackInOut::create(moveA),
@@ -223,8 +225,8 @@ void GameScene::__makeQuestion()
     question->setPosition(ccp(PP_DESIGN_WIDTH+200, PP_DESIGN_HEIGHT/2+50));
     answer->setPosition(question->getPosition()-ccp(0, 80));
     
-    CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
-    CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+    CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+    CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
     question->runAction(CCEaseBackInOut::create(moveQ));
     answer->runAction(CCSequence::create(
                 CCEaseBackInOut::create(moveA),
@@ -265,6 +267,7 @@ void GameScene::__restartHandler(cocos2d::CCObject *pSender)
     pBackground->runAction(CCSequence::create(
                               CCMoveTo::create(0.5f, CCPointZero),
                               CCCallFunc::create(this, callfunc_selector(GameScene::__restartGame)),
+                              CCDelayTime::create(0.5f),
                               CCMoveTo::create(0.5f, ccp(0,-s.height)),
                               CCCallFunc::create(pBackground, callfunc_selector(CCLayerColor::removeFromParent)),
                               NULL
