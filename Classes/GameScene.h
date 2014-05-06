@@ -20,6 +20,7 @@ private:
     CCLabelTTF *answer;
     CCLabelTTF *scoreLabel;
     CCProgressTimer *progressBar;
+    CCProgressFromTo *progressAct;
     CCLayerColor *background;
     bool isOver;
     bool result;
