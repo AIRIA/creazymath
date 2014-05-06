@@ -235,6 +235,7 @@
 		4141CC43191743A600205C03 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4141CC3F191743A600205C03 /* icon.png */; };
 		414B07F5191764D900B68F51 /* perfect.png in Resources */ = {isa = PBXBuildFile; fileRef = 414B07F4191764D900B68F51 /* perfect.png */; };
 		414B07FB19176CA000B68F51 /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 414B07F919176CA000B68F51 /* GameScene.cpp */; };
+		415A10211918821D00773ED1 /* PPTransitionOutB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 415A101F1918821D00773ED1 /* PPTransitionOutB.cpp */; };
 		41681038191795EC0011E939 /* AudioUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41681036191795EC0011E939 /* AudioUtil.cpp */; };
 		4168103B191797050011E939 /* AppConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41681039191797050011E939 /* AppConfig.cpp */; };
 		41BC70E415BF81A5006A0A6C /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70DA15BF81A5006A0A6C /* AppController.mm */; };
@@ -723,6 +724,8 @@
 		414B07F4191764D900B68F51 /* perfect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = perfect.png; sourceTree = "<group>"; };
 		414B07F919176CA000B68F51 /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameScene.cpp; path = ../Classes/GameScene.cpp; sourceTree = "<group>"; };
 		414B07FA19176CA000B68F51 /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = ../Classes/GameScene.h; sourceTree = "<group>"; };
+		415A101F1918821D00773ED1 /* PPTransitionOutB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PPTransitionOutB.cpp; path = ../Classes/PPTransitionOutB.cpp; sourceTree = "<group>"; };
+		415A10201918821D00773ED1 /* PPTransitionOutB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PPTransitionOutB.h; path = ../Classes/PPTransitionOutB.h; sourceTree = "<group>"; };
 		41681036191795EC0011E939 /* AudioUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AudioUtil.cpp; path = ../Classes/AudioUtil.cpp; sourceTree = "<group>"; };
 		41681037191795EC0011E939 /* AudioUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioUtil.h; path = ../Classes/AudioUtil.h; sourceTree = "<group>"; };
 		41681039191797050011E939 /* AppConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConfig.cpp; path = ../Classes/AppConfig.cpp; sourceTree = "<group>"; };
@@ -793,6 +796,8 @@
 				41681037191795EC0011E939 /* AudioUtil.h */,
 				41681039191797050011E939 /* AppConfig.cpp */,
 				4168103A191797050011E939 /* AppConfig.h */,
+				415A101F1918821D00773ED1 /* PPTransitionOutB.cpp */,
+				415A10201918821D00773ED1 /* PPTransitionOutB.h */,
 			);
 			name = Classes;
 			path = ../classes;
@@ -1977,6 +1982,7 @@
 				379BBA7C17F03FDE00829B88 /* CCActionObject.cpp in Sources */,
 				379BBA7D17F03FDE00829B88 /* CCArmatureAnimation.cpp in Sources */,
 				379BBA7E17F03FDE00829B88 /* CCProcessBase.cpp in Sources */,
+				415A10211918821D00773ED1 /* PPTransitionOutB.cpp in Sources */,
 				379BBA7F17F03FDE00829B88 /* CCTween.cpp in Sources */,
 				379BBA8017F03FDE00829B88 /* CCArmature.cpp in Sources */,
 				379BBA8117F03FDE00829B88 /* CCBone.cpp in Sources */,

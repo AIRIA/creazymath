@@ -30,6 +30,9 @@ private:
     void __showResult();
     void __soundHandler(CCObject *pSender);
     void __createRandomColor();
+    void __menuHandler(CCObject *pSender);
+    void __restartHandler(CCObject *pSender);
+    void __restartGame();
     
     std::vector<ccColor3B> colors;
     

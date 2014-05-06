@@ -9,6 +9,7 @@
 #include "HomeScene.h"
 #include "GameScene.h"
 #include "AudioUtil.h"
+#include "PPTransitionOutB.h"
 
 
 
@@ -52,5 +53,5 @@ bool HomeScene::init()
 void HomeScene::__startHandler(cocos2d::CCObject *pSender)
 {
     AudioUtil::playEffect("sound/restart.ogg");
-    CCDirector::sharedDirector()->replaceScene(CCTransitionSlideInT::create(0.5f, GameScene::scene()));
+    CCDirector::sharedDirector()->replaceScene(PPTransitionOutB::create(0.5f, GameScene::scene()));
 }

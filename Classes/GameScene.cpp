@@ -9,12 +9,18 @@
 #include "GameScene.h"
 #include "AudioUtil.h"
 #include "AppConfig.h"
+#include "HomeScene.h"
 
 enum{
     kRightMenu,
     kWrongMenu,
-    kProgressSeq
+    kProgressSeq,
+    kAnswerMenu,
+    kOverBackgroundLayer,
+    kGameOverPanel
 };
+
+#define PP_GAME_OVER_TIME 1.0f
 
 bool GameScene::init()
 {
@@ -30,11 +36,11 @@ bool GameScene::init()
     colors.push_back(ccc3(153,152,153));
     colors.push_back(ccc3(48,159,64));
     
-    
+    /* 背景颜色层 */
     background = CCLayerColor::create(ccc4(212,212,212,255),m_winSize.width,m_winSize.height);
     background->setColor(ccc3(255, 0, 0));
     addChild(background,-1);
-
+    /* 正确和错误的菜单 以及声音开关 */
     CCMenuItemSprite *right = CCMenuItemSprite::create(SPRITE("images/true.png"), SPRITE("images/true_select.png"),this,menu_selector(GameScene::__answerHandler));
     CCMenuItemSprite *wrong = CCMenuItemSprite::create(SPRITE("images/false.png"), SPRITE("images/false_select.png"),this,menu_selector(GameScene::__answerHandler));
     right->setTag(kRightMenu);
@@ -47,12 +53,13 @@ bool GameScene::init()
     CCMenu *answerMenu = CCMenu::create(right,wrong,sound,NULL);
     answerMenu->setAnchorPoint(CCPointZero);
     answerMenu->setPosition(CCPointZero);
+    answerMenu->setTag(kAnswerMenu);
     sound->setPosition(ccp(20,PP_DESIGN_HEIGHT-100));
     
     right->setPosition(ccp(PP_DESIGN_WIDTH/4, 100));
     wrong->setPosition(ccp(PP_DESIGN_WIDTH/4*3, 100));
     m_pFooter->addChild(answerMenu);
-    
+    /* 顶部的title */
     CCLabelTTF *title = CCLabelTTF::create("疯狂数学", "Arial", 35);
     title->setColor(ccc3(49,65,80));
     title->setPosition(ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT-38));
@@ -65,12 +72,13 @@ bool GameScene::init()
     answer = CCLabelTTF::create("=5", "fonts/relay-black.ttf", 90);
     answer->setPosition(question->getPosition()-ccp(0, 80));
     m_pBody->addChild(answer);
-    
+    /* 当前的得分 */
     scoreLabel = CCLabelTTF::create("0", "fonts/relay-black.ttf", 40);
     scoreLabel->setAnchorPoint(ccp(1.0f, 0.5f));
     scoreLabel->setColor(ccORANGE);
     scoreLabel->setPosition(ccp(PP_DESIGN_WIDTH-20,PP_DESIGN_HEIGHT-100));
     m_pFooter->addChild(scoreLabel);
+    /* 时间进度条 提示倒计时 */
     CCSprite *timeBar = CCSprite::create("images/whiteBlock.png");
     timeBar->setColor(ccc3(126,187,248));
     progressBar = CCProgressTimer::create(timeBar);
@@ -78,6 +86,7 @@ bool GameScene::init()
     progressBar->setType(kCCProgressTimerTypeBar);
     progressBar->setMidpoint(ccp(0,0));
     progressBar->setBarChangeRate(ccp(1,0));
+    progressBar->setPercentage(100);
     progressBar->setScaleX(PP_DESIGN_WIDTH/progressBar->getContentSize().width);
     progressBar->setScaleY(7/progressBar->getContentSize().height);
     progressBar->setPosition(sound->getPosition()-ccp(20, -30));
@@ -129,30 +138,50 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 
 void GameScene::__showResult()
 {
+    /* 背景层 */
+    CCLayerColor *bg = CCLayerColor::create(ccc4(0, 0, 0, 0));
+    bg->setTag(kOverBackgroundLayer);
+    addChild(bg);
+    bg->runAction(
+                  CCFadeTo::create(PP_GAME_OVER_TIME, 128)
+    );
+    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    answerMenu->setTouchEnabled(false);
+    
+    /* 播放音乐重置数据 */
     AudioUtil::playEffect("sound/fail.ogg");
     progressBar->setPercentage(100);
-    CCMessageBox("game over", "tip");
     isOver = true;
-    __createRandomColor();
     /* 显示结果面板 */
     CCNode *resultNode = CCNode::create();
     resultNode->setScale(m_fScaleFactor);
     CCSprite *resultPanel = CCSprite::create("images/game_over_bg.png");
     resultNode->addChild(resultPanel);
-    CCLabelTTF *pScoreLabel = CCLabelTTF::create(scoreLabel->getString(), "fonts/relay-black.ttf", 20);
-    CCLabelTTF *topScoreLabel = CCLabelTTF::create("", "fonts/relay-black.ttf", 20);
+    char topStoreStr[10];
+    sprintf(topStoreStr, "%d",AppConfig::getTopScore());
+    CCLabelTTF *pScoreLabel = CCLabelTTF::create(scoreLabel->getString(), "fonts/relay-black.ttf", 30);
+    CCLabelTTF *topScoreLabel = CCLabelTTF::create(topStoreStr, "fonts/relay-black.ttf", 30);
+    pScoreLabel->setPosition(ccp(20, 5));
+    topScoreLabel->setPosition(ccp(20, -40));
     resultNode->addChild(pScoreLabel);
     resultNode->addChild(topScoreLabel);
-    CCMenuItemSprite *restartItem = CCMenuItemSprite::create(SPRITE("images/play.png"), SPRITE("images/play_select.png"));
-    CCMenuItemSprite *menuItem = CCMenuItemSprite::create(SPRITE("images/menu.png"), SPRITE("images/menu_select.png"));
+    CCMenuItemSprite *restartItem = CCMenuItemSprite::create(SPRITE("images/play.png"), SPRITE("images/play_select.png"),this,menu_selector(GameScene::__restartHandler));
+    CCMenuItemSprite *menuItem = CCMenuItemSprite::create(SPRITE("images/menu.png"), SPRITE("images/menu_select.png"),this,menu_selector(GameScene::__menuHandler));
     CCMenu *menu = CCMenu::create(restartItem,menuItem,NULL);
     menu->ignoreAnchorPointForPosition(false);
-    menu->setAnchorPoint(ccp(0.5f,0.0f));
+    menu->setAnchorPoint(ccp(0.5f,0.5f));
+    menu->alignItemsHorizontallyWithPadding(30);
+    menu->setPosition(ccp(VisibleRect::center().x, VisibleRect::center().y-90));
     resultNode->addChild(menu);
-    restartItem->setPosition(ccp(0, -50));
-    menuItem->setPosition(ccp(100, -50));
     addChild(resultNode);
-    resultNode->setPosition(VisibleRect::center());
+    resultNode->setPosition(VisibleRect::top()+ccp(0, 300));
+    /* resultnode action */
+    resultNode->runAction(
+            CCEaseBackInOut::create(
+                CCMoveTo::create(PP_GAME_OVER_TIME, VisibleRect::center())
+            )
+    );
+    resultNode->setTag(kGameOverPanel);
 }
 
 void GameScene::__makeQuestion()
@@ -187,4 +216,45 @@ void GameScene::__soundHandler(cocos2d::CCObject *pSender)
         AppConfig::setSoundEnabled(false);
     }
     
+}
+
+void GameScene::__menuHandler(cocos2d::CCObject *pSender)
+{
+    CCDirector::sharedDirector()->replaceScene(CCTransitionMoveInB::create(0.3f, HomeScene::scene()));
+}
+
+void GameScene::__restartHandler(cocos2d::CCObject *pSender)
+{
+    CCSize s = CCDirector::sharedDirector()->getWinSize();
+    CCLayerColor *pBackground = CCLayerColor::create(ccc4(49,65,80, 255),m_winSize.width,m_winSize.height);
+    pBackground->setPosition(ccp(0, -s.height));
+    addChild(pBackground);
+    
+    CCSprite *pLogo = CCSprite::create("images/logo_home.png");
+    pLogo->setScale(m_fScaleFactor);
+    pBackground->addChild(pLogo);
+    pLogo->setPosition(VisibleRect::center()+ccp(0, 100));
+    /* background action */
+    pBackground->runAction(CCSequence::create(
+                              CCMoveTo::create(0.5f, CCPointZero),
+                              CCCallFunc::create(this, callfunc_selector(GameScene::__restartGame)),
+                              CCMoveTo::create(0.5f, ccp(0,-s.height)),
+                              CCCallFunc::create(pBackground, callfunc_selector(CCLayerColor::removeFromParent)),
+                              NULL
+                              )
+                           );
+}
+
+void GameScene::__restartGame()
+{
+    if (score>AppConfig::getTopScore()) {
+        AppConfig::setTopScore(score);
+    }
+    score=0;
+    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    answerMenu->setTouchEnabled(true);
+    __makeQuestion();
+    __createRandomColor();
+    removeChildByTag(kGameOverPanel);
+    removeChildByTag(kOverBackgroundLayer);
 }
