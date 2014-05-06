@@ -21,6 +21,11 @@ enum{
 };
 
 #define PP_GAME_OVER_TIME 1.0f
+void GameScene::onEnter()
+{
+    BaseLayer::onEnter();
+    __makeQuestion();
+}
 
 bool GameScene::init()
 {
@@ -66,9 +71,9 @@ bool GameScene::init()
     m_pHeader->addChild(title);
     
     question = CCLabelTTF::create("3+2", "fonts/relay-black.ttf", 90);
-    question->setPosition(ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
-    m_pBody->addChild(question);
     
+    m_pBody->addChild(question);
+    question->setPosition(ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
     answer = CCLabelTTF::create("=5", "fonts/relay-black.ttf", 90);
     answer->setPosition(question->getPosition()-ccp(0, 80));
     m_pBody->addChild(answer);
@@ -92,7 +97,6 @@ bool GameScene::init()
     progressBar->setPosition(sound->getPosition()-ccp(20, -30));
     m_pFooter->addChild(progressBar);
     /* 生成一个问题 并且计算出结果 */
-    __makeQuestion();
     __createRandomColor();
     return true;
 }
@@ -105,6 +109,12 @@ void GameScene::__createRandomColor()
 
 void GameScene::__runProgressBar()
 {
+    if (isOver) {
+        score = 0;
+        scoreLabel->setString("0");
+        isOver = false;
+        return;
+    }
     progressBar->setPercentage(100);
     CCProgressFromTo *progressAct = CCProgressFromTo::create(1, 100, 0);
     CCCallFunc *progressHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__showResult));
@@ -115,22 +125,26 @@ void GameScene::__runProgressBar()
 
 void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 {
-    if (isOver) {
-        __runProgressBar();
-        score = 0;
-        scoreLabel->setString("0");
-        isOver = false;
-    }
+    
     progressBar->stopActionByTag(kProgressSeq);
     CCNode *item = (CCNode*)pSender;
     if( ( result == true && item->getTag() == kRightMenu ) || (result==false&&item->getTag()==kWrongMenu) ){
-        __makeQuestion();
-        __runProgressBar();
+        /* 移动问题的位置 */
+        CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+        CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+        question->runAction(CCEaseBackInOut::create(moveQ));
+        answer->runAction(CCSequence::create(
+                            CCEaseBackInOut::create(moveA),
+                            CCCallFunc::create(this, callfunc_selector(GameScene::__makeQuestion)),
+                            NULL
+                            ));
         score += 1;
+        progressBar->setPercentage(100);
         char scoreStr[10];
         sprintf(scoreStr, "%d",score);
         scoreLabel->setString(scoreStr);
         AudioUtil::playEffect("sound/scored.ogg");
+        
     }else{
         __showResult();
     }
@@ -186,6 +200,8 @@ void GameScene::__showResult()
 
 void GameScene::__makeQuestion()
 {
+    
+    /* */
     int a,b,right,wrong;
     std::vector<int> answers;
     if(score<10){
@@ -204,6 +220,17 @@ void GameScene::__makeQuestion()
     question->setString(str);
     sprintf(str, "=%d",wrong);
     answer->setString(str);
+    question->setPosition(ccp(PP_DESIGN_WIDTH+200, PP_DESIGN_HEIGHT/2+50));
+    answer->setPosition(question->getPosition()-ccp(0, 80));
+    
+    CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+    CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+    question->runAction(CCEaseBackInOut::create(moveQ));
+    answer->runAction(CCSequence::create(
+                CCEaseBackInOut::create(moveA),
+                CCCallFunc::create(this, callfunc_selector(GameScene::__runProgressBar)),
+                NULL
+                ));
 }
 
 void GameScene::__soundHandler(cocos2d::CCObject *pSender)
@@ -257,4 +284,5 @@ void GameScene::__restartGame()
     __createRandomColor();
     removeChildByTag(kGameOverPanel);
     removeChildByTag(kOverBackgroundLayer);
+    AudioUtil::playEffect("sound/restart.ogg");
 }

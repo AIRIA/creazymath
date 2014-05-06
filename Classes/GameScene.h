@@ -37,6 +37,7 @@ private:
     std::vector<ccColor3B> colors;
     
 public:
+    virtual void onEnter();
     GameScene():score(0),best(0),question(NULL),answer(NULL),progressBar(NULL),isOver(true){
     };
     virtual bool init();
