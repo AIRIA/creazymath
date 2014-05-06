@@ -238,6 +238,7 @@
 		415A10211918821D00773ED1 /* PPTransitionOutB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 415A101F1918821D00773ED1 /* PPTransitionOutB.cpp */; };
 		41681038191795EC0011E939 /* AudioUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41681036191795EC0011E939 /* AudioUtil.cpp */; };
 		4168103B191797050011E939 /* AppConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41681039191797050011E939 /* AppConfig.cpp */; };
+		417A90E91918EE85007D75BC /* PluginUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 417A90E71918EE85007D75BC /* PluginUtil.cpp */; };
 		41BC70E415BF81A5006A0A6C /* AppController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 41BC70DA15BF81A5006A0A6C /* AppController.mm */; };
 		41BC70E515BF81A5006A0A6C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DC15BF81A5006A0A6C /* InfoPlist.strings */; };
 		41BC70E615BF81A5006A0A6C /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41BC70DE15BF81A5006A0A6C /* MainMenu.xib */; };
@@ -730,6 +731,8 @@
 		41681037191795EC0011E939 /* AudioUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioUtil.h; path = ../Classes/AudioUtil.h; sourceTree = "<group>"; };
 		41681039191797050011E939 /* AppConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AppConfig.cpp; path = ../Classes/AppConfig.cpp; sourceTree = "<group>"; };
 		4168103A191797050011E939 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppConfig.h; path = ../Classes/AppConfig.h; sourceTree = "<group>"; };
+		417A90E71918EE85007D75BC /* PluginUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PluginUtil.cpp; path = ../Classes/PluginUtil.cpp; sourceTree = "<group>"; };
+		417A90E81918EE85007D75BC /* PluginUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PluginUtil.h; path = ../Classes/PluginUtil.h; sourceTree = "<group>"; };
 		41BC70D915BF81A5006A0A6C /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = SOURCE_ROOT; };
 		41BC70DA15BF81A5006A0A6C /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = SOURCE_ROOT; };
 		41BC70DD15BF81A5006A0A6C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = InfoPlist.strings; sourceTree = "<group>"; };
@@ -1678,6 +1681,8 @@
 		417A90E41918E164007D75BC /* plugins */ = {
 			isa = PBXGroup;
 			children = (
+				417A90E71918EE85007D75BC /* PluginUtil.cpp */,
+				417A90E81918EE85007D75BC /* PluginUtil.h */,
 			);
 			name = plugins;
 			sourceTree = "<group>";
@@ -1992,6 +1997,7 @@
 				379BBA7E17F03FDE00829B88 /* CCProcessBase.cpp in Sources */,
 				415A10211918821D00773ED1 /* PPTransitionOutB.cpp in Sources */,
 				379BBA7F17F03FDE00829B88 /* CCTween.cpp in Sources */,
+				417A90E91918EE85007D75BC /* PluginUtil.cpp in Sources */,
 				379BBA8017F03FDE00829B88 /* CCArmature.cpp in Sources */,
 				379BBA8117F03FDE00829B88 /* CCBone.cpp in Sources */,
 				379BBA8217F03FDE00829B88 /* CCDatas.cpp in Sources */,

@@ -14,6 +14,10 @@
 #include "SimpleAudioEngine.h"
 #include "VisibleRect.h"
 
+#include <jni.h>
+#include "platform/android/jni/JniHelper.h"
+#include <android/log.h>
+
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace cocos2d;
@@ -33,5 +37,7 @@ using namespace CocosDenshion;
 #define PP_CENTER ccp(PP_DESIGN_WIDTH/2,PP_DESIGN_HEIGHT/2);
 
 #define SPRITE(path) CCSprite::create(path)
+
+#define
 
 #endif
