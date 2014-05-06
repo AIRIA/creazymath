@@ -781,6 +781,7 @@
 		15AA9C4015B7EC450033D6C2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				417A90E41918E164007D75BC /* plugins */,
 				4141CC35191739EC00205C03 /* VisibleRect.cpp */,
 				4141CC36191739EC00205C03 /* VisibleRect.h */,
 				1AFAF8C616D3886000DB1158 /* AppDelegate.cpp */,
@@ -1672,6 +1673,13 @@
 				379BBA7317F03FDE00829B88 /* Reader */,
 			);
 			path = CocoStudio;
+			sourceTree = "<group>";
+		};
+		417A90E41918E164007D75BC /* plugins */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = plugins;
 			sourceTree = "<group>";
 		};
 		41BC70D815BF818D006A0A6C /* mac */ = {

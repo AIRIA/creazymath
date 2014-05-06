@@ -20,7 +20,10 @@ enum{
     kGameOverPanel
 };
 
-#define PP_GAME_OVER_TIME 1.0f
+#define PP_GAME_OVER_TIME 0.6f
+#define PP_LABEL_TIME 0.3f
+#define PP_LOGO_LAYER_SLIDE_TIME 0.3f
+
 void GameScene::onEnter()
 {
     BaseLayer::onEnter();
@@ -116,22 +119,26 @@ void GameScene::__runProgressBar()
         return;
     }
     progressBar->setPercentage(100);
-    CCProgressFromTo *progressAct = CCProgressFromTo::create(1, 100, 0);
+    progressAct = CCProgressFromTo::create(1, 100, 0);
     CCCallFunc *progressHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__showResult));
     CCSequence *seq = CCSequence::create(progressAct,progressHandler,NULL);
     seq->setTag(kProgressSeq);
     progressBar->runAction(seq);
+    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    answerMenu->setTouchEnabled(true);
 }
 
 void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 {
-    
+//    progressBar->stopAllActions();
     progressBar->stopActionByTag(kProgressSeq);
+    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    answerMenu->setTouchEnabled(false);
     CCNode *item = (CCNode*)pSender;
     if( ( result == true && item->getTag() == kRightMenu ) || (result==false&&item->getTag()==kWrongMenu) ){
         /* 移动问题的位置 */
-        CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
-        CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+        CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+        CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
         question->runAction(CCEaseBackInOut::create(moveQ));
         answer->runAction(CCSequence::create(
                             CCEaseBackInOut::create(moveA),
@@ -146,12 +153,17 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
         AudioUtil::playEffect("sound/scored.ogg");
         
     }else{
+        CCLog("game over");
         __showResult();
     }
 }
 
 void GameScene::__showResult()
 {
+    if (isOver==true) {
+        return;
+    }
+    isOver = true;
     /* 背景层 */
     CCLayerColor *bg = CCLayerColor::create(ccc4(0, 0, 0, 0));
     bg->setTag(kOverBackgroundLayer);
@@ -165,7 +177,7 @@ void GameScene::__showResult()
     /* 播放音乐重置数据 */
     AudioUtil::playEffect("sound/fail.ogg");
     progressBar->setPercentage(100);
-    isOver = true;
+    
     /* 显示结果面板 */
     CCNode *resultNode = CCNode::create();
     resultNode->setScale(m_fScaleFactor);
@@ -223,8 +235,8 @@ void GameScene::__makeQuestion()
     question->setPosition(ccp(PP_DESIGN_WIDTH+200, PP_DESIGN_HEIGHT/2+50));
     answer->setPosition(question->getPosition()-ccp(0, 80));
     
-    CCActionInterval *moveQ = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
-    CCActionInterval *moveA = CCMoveTo::create(0.5f,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
+    CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
+    CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
     question->runAction(CCEaseBackInOut::create(moveQ));
     answer->runAction(CCSequence::create(
                 CCEaseBackInOut::create(moveA),
@@ -263,9 +275,10 @@ void GameScene::__restartHandler(cocos2d::CCObject *pSender)
     pLogo->setPosition(VisibleRect::center()+ccp(0, 100));
     /* background action */
     pBackground->runAction(CCSequence::create(
-                              CCMoveTo::create(0.5f, CCPointZero),
+                              CCMoveTo::create(PP_LOGO_LAYER_SLIDE_TIME, CCPointZero),
                               CCCallFunc::create(this, callfunc_selector(GameScene::__restartGame)),
-                              CCMoveTo::create(0.5f, ccp(0,-s.height)),
+                              CCDelayTime::create(PP_LOGO_LAYER_SLIDE_TIME),
+                              CCMoveTo::create(PP_LOGO_LAYER_SLIDE_TIME, ccp(0,-s.height)),
                               CCCallFunc::create(pBackground, callfunc_selector(CCLayerColor::removeFromParent)),
                               NULL
                               )
