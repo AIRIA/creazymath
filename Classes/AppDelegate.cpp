@@ -1,6 +1,7 @@
 #include "AppDelegate.h"
 #include "HomeScene.h"
 #include "AppConfig.h"
+#include "PluginUtil.h"
 
 USING_NS_CC;
 
@@ -22,6 +23,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     CCScene *pScene = HomeScene::scene();
     pDirector->runWithScene(pScene);
     AppConfig::init();
+    PluginUtil::init();
+    PluginUtil::invoke(kPPdoSdkShowAds);
+    PluginUtil::invoke(kPPdoSdkHideAds);
+    PluginUtil::invoke(kPPdoSdkShowScoreWall);
     return true;
 }
 

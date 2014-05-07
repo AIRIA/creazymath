@@ -20,11 +20,11 @@ enum MethodType{
 class PluginUtil
 {
 private:
-    JniMethodInfo minfo;
-    jobject obj;
+    static JniMethodInfo minfo;
+    static jobject obj;
 public:
     static void init();
-    static void invoke(MethodType key, std::string param);
+    static void invoke(MethodType key, std::string param="");
 };
 
 

@@ -38,6 +38,5 @@ using namespace CocosDenshion;
 
 #define SPRITE(path) CCSprite::create(path)
 
-#define
 
 #endif

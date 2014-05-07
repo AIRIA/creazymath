@@ -11,10 +11,12 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/HomeScene.cpp \
                    ../../Classes/BaseLayer.cpp \
                    ../../Classes/VisibleRect.cpp \
-		   ../../Classes/GameScene.cpp \
-		   ../../Classes/AudioUtil.cpp \
-		   ../../Classes/AppConfig.cpp  \
-		   ../../Classes/PPTransitionOutB.cpp
+		   		   ../../Classes/GameScene.cpp \
+		           ../../Classes/AudioUtil.cpp \
+		   	  	   ../../Classes/AppConfig.cpp  \
+		   		   ../../Classes/PPTransitionOutB.cpp \
+		   		   ../../Classes/PluginUtil.cpp 
+		   		   
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
