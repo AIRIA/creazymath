@@ -24,13 +24,7 @@ public class SdkManager implements ISdkManager {
 	@Override
 	public void doSdkShowAds(String params) {
 		Log.v(TAG, "invoke show ads method");
-		PluginWrapper.runOnMainThread(new Runnable() {
-			@Override
-			public void run() {
-				AdsAdmob.getInstance(mContext).showAds(AdsWrapper.ADS_TYPE_BANNER, AdsAdmob.ADMOB_SIZE_BANNER, AdsWrapper.POS_TOP);
-			}
-		});
-
+		AdsAdmob.getInstance(mContext).showAds(AdsWrapper.ADS_TYPE_BANNER, AdsAdmob.ADMOB_SIZE_BANNER, AdsWrapper.POS_TOP);
 	}
 
 	@Override

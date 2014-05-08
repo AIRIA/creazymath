@@ -27,6 +27,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.giant.sdk.PluginWrapper;
+
 public class AdsWrapper {
 
 	public static final int RESULT_CODE_AdsReceived = 0;               // The ad is received

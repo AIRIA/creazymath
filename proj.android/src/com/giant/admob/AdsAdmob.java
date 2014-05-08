@@ -33,6 +33,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.giant.sdk.PluginWrapper;
 import com.google.ads.Ad;
 import com.google.ads.AdListener;
 import com.google.ads.AdRequest;
