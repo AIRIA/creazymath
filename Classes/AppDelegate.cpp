@@ -25,8 +25,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     AppConfig::init();
     PluginUtil::init();
     PluginUtil::invoke(kPPdoSdkShowAds);
-    PluginUtil::invoke(kPPdoSdkHideAds);
-    PluginUtil::invoke(kPPdoSdkShowScoreWall);
     return true;
 }
 

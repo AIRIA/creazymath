@@ -10,6 +10,7 @@
 #include "AudioUtil.h"
 #include "AppConfig.h"
 #include "HomeScene.h"
+#include "PluginUtil.h"
 
 enum{
     kRightMenu,
@@ -28,6 +29,7 @@ void GameScene::onEnter()
 {
     BaseLayer::onEnter();
     __makeQuestion();
+    
 }
 
 bool GameScene::init()
@@ -112,30 +114,35 @@ void GameScene::__createRandomColor()
 
 void GameScene::__runProgressBar()
 {
+    CCLog("2->start progress timer");
+    __setMenuStatus(true);
     if (isOver) {
+        CCLog("-----first question");
         score = 0;
         scoreLabel->setString("0");
         isOver = false;
         return;
     }
     progressBar->setPercentage(100);
-    progressAct = CCProgressFromTo::create(1, 100, 0);
-    CCCallFunc *progressHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__showResult));
-    CCSequence *seq = CCSequence::create(progressAct,progressHandler,NULL);
-    seq->setTag(kProgressSeq);
-    progressBar->runAction(seq);
-    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
-    answerMenu->setTouchEnabled(true);
+    progressAct = CCProgressFromTo::create(0.7f, 100, 0);
+    progressHandler = CCCallFunc::create(this, callfunc_selector(GameScene::__timeup));
+    progressSeq = CCSequence::create(progressAct,progressHandler,NULL);
+    progressBar->runAction(progressSeq);
+}
+
+void GameScene::__timeup()
+{
+    CCLog("3->time is up");
+    __showResult();
 }
 
 void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 {
-//    progressBar->stopAllActions();
-    progressBar->stopActionByTag(kProgressSeq);
-    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
-    answerMenu->setTouchEnabled(false);
+    progressBar->stopAllActions();
+    __setMenuStatus(false);
     CCNode *item = (CCNode*)pSender;
     if( ( result == true && item->getTag() == kRightMenu ) || (result==false&&item->getTag()==kWrongMenu) ){
+        CCLog("3->answer right");
         /* 移动问题的位置 */
         CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
         CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
@@ -151,9 +158,8 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
         sprintf(scoreStr, "%d",score);
         scoreLabel->setString(scoreStr);
         AudioUtil::playEffect("sound/scored.ogg");
-        
     }else{
-        CCLog("game over");
+        CCLog("3->game over");
         __showResult();
     }
 }
@@ -161,8 +167,10 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 void GameScene::__showResult()
 {
     if (isOver==true) {
+        CCLog("repeat show result");
         return;
     }
+    CCLog("4->show result");
     isOver = true;
     /* 背景层 */
     CCLayerColor *bg = CCLayerColor::create(ccc4(0, 0, 0, 0));
@@ -171,8 +179,6 @@ void GameScene::__showResult()
     bg->runAction(
                   CCFadeTo::create(PP_GAME_OVER_TIME, 128)
     );
-    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
-    answerMenu->setTouchEnabled(false);
     
     /* 播放音乐重置数据 */
     AudioUtil::playEffect("sound/fail.ogg");
@@ -208,23 +214,36 @@ void GameScene::__showResult()
             )
     );
     resultNode->setTag(kGameOverPanel);
+    
+    /* 随机显示广告 */
+    if(rand()%7==0)
+    {
+        if (rand()%2==0) {
+            PluginUtil::invoke(kPPdoSdkShowSpotAds);
+        }else{
+            PluginUtil::invoke(kPPdoSdkShowScoreWall);
+        }
+    }
 }
 
 void GameScene::__makeQuestion()
 {
-    
-    /* */
+    /* 生成逻辑
+     LV1:1-5之间的数字
+     LV2:1-10之间的数字
+     LV3:1-15之间的数字
+     LV4:1-20之间的数字
+     */
+    int range;
+    CCLog("1->create new question");
+    int level = score/5+1;
+    range = 3*level;
     int a,b,right,wrong;
     std::vector<int> answers;
-    if(score<10){
-        a = rand()%10+1;
-        b = rand()%10+1;
-    }else{
-        a = rand()%score+1;
-        b = rand()%score+1;
-    }
+    a = rand()%range+1;
+    b = rand()%range+1;
     right = a + b;
-    wrong = right+rand()%4;
+    wrong = right+rand()%3;
     result = right==wrong;
     
     char str[20];
@@ -264,6 +283,10 @@ void GameScene::__menuHandler(cocos2d::CCObject *pSender)
 
 void GameScene::__restartHandler(cocos2d::CCObject *pSender)
 {
+    CCMenuItemSprite *menuItem = (CCMenuItemSprite*)pSender;
+    CCMenu *menu = (CCMenu*)menuItem->getParent();
+    menu->setTouchEnabled(false);
+    AudioUtil::playEffect("sound/restart.ogg");
     CCSize s = CCDirector::sharedDirector()->getWinSize();
     CCLayerColor *pBackground = CCLayerColor::create(ccc4(49,65,80, 255),m_winSize.width,m_winSize.height);
     pBackground->setPosition(ccp(0, -s.height));
@@ -280,6 +303,7 @@ void GameScene::__restartHandler(cocos2d::CCObject *pSender)
                               CCDelayTime::create(PP_LOGO_LAYER_SLIDE_TIME),
                               CCMoveTo::create(PP_LOGO_LAYER_SLIDE_TIME, ccp(0,-s.height)),
                               CCCallFunc::create(pBackground, callfunc_selector(CCLayerColor::removeFromParent)),
+                              CCCallFunc::create(this, callfunc_selector(GameScene::__resetMenuStatus)),
                               NULL
                               )
                            );
@@ -287,15 +311,28 @@ void GameScene::__restartHandler(cocos2d::CCObject *pSender)
 
 void GameScene::__restartGame()
 {
+    CCLog("5-> restart Game");
     if (score>AppConfig::getTopScore()) {
         AppConfig::setTopScore(score);
     }
     score=0;
-    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
-    answerMenu->setTouchEnabled(true);
-    __makeQuestion();
     __createRandomColor();
     removeChildByTag(kGameOverPanel);
     removeChildByTag(kOverBackgroundLayer);
-    AudioUtil::playEffect("sound/restart.ogg");
+}
+
+void GameScene::__resetMenuStatus()
+{
+    __makeQuestion();
+}
+
+void GameScene::__setMenuStatus(bool status)
+{
+    if (status) {
+        CCLog("-----enabled select menu");
+    }else{
+        CCLog("-----disabled select menu");
+    }
+    CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    answerMenu->setTouchEnabled(status);
 }

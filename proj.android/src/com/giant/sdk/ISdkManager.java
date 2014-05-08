@@ -7,4 +7,6 @@ public interface ISdkManager {
 	public void doSdkHideAds(String params);
 	/* 打开积分墙 */
 	public void doSdkShowScoreWall(String params);
+	/* 展示插播广告 */
+	public void doSdkShowSpotAds(String params);
 }

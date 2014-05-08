@@ -14,9 +14,11 @@
 #include "SimpleAudioEngine.h"
 #include "VisibleRect.h"
 
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include <android/log.h>
+#endif
 
 USING_NS_CC;
 USING_NS_CC_EXT;

@@ -13,7 +13,7 @@
 
 class GameScene:public BaseLayer
 {
-private:
+private:    
     int score;
     int best;
     CCLabelTTF *question;
@@ -21,6 +21,9 @@ private:
     CCLabelTTF *scoreLabel;
     CCProgressTimer *progressBar;
     CCProgressFromTo *progressAct;
+    CCSequence *progressSeq;
+    CCCallFunc *progressHandler;
+    
     CCLayerColor *background;
     bool isOver;
     bool result;
@@ -34,6 +37,9 @@ private:
     void __menuHandler(CCObject *pSender);
     void __restartHandler(CCObject *pSender);
     void __restartGame();
+    void __resetMenuStatus();
+    void __timeup();
+    void __setMenuStatus(bool status);
     
     std::vector<ccColor3B> colors;
     

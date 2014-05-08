@@ -10,10 +10,13 @@
 #define PP_SDK_CLASS "com/giant/sdk/SdkManager"
 #define PP_SDK_INSTANCE_METHOD "instance"
 
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 JniMethodInfo PluginUtil::minfo;
 jobject PluginUtil::obj;
+#endif
 
 void PluginUtil::init() {
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	bool isHave = JniHelper::getStaticMethodInfo(minfo, PP_SDK_CLASS,
 	PP_SDK_INSTANCE_METHOD, "()Ljava/lang/Object;");
 	if (isHave) {
@@ -21,9 +24,11 @@ void PluginUtil::init() {
 	} else {
 		obj = NULL;
 	}
+#endif
 }
 
 void PluginUtil::invoke(MethodType key, std::string param) {
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
 	if (obj == NULL) {
 		CCLog("Plugin Object is NULL");
 		return;
@@ -39,6 +44,9 @@ void PluginUtil::invoke(MethodType key, std::string param) {
 	case kPPdoSdkShowScoreWall:
 		methodName = "doSdkShowScoreWall";
 		break;
+    case kPPdoSdkShowSpotAds:
+        methodName = "doSdkShowSpotAds";
+        break;
 	default:
 		break;
 	}
@@ -50,5 +58,5 @@ void PluginUtil::invoke(MethodType key, std::string param) {
 	}
 	jstring paramStr = minfo.env->NewStringUTF(param.c_str());
 	minfo.env->CallVoidMethod(obj, minfo.methodID, paramStr);
-
+#endif
 }

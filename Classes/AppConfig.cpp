@@ -10,9 +10,10 @@
 
 void AppConfig::init()
 {
-    bool isExist = CCUserDefault::sharedUserDefault()->isXMLFileExist();
+    bool isExist = CCUserDefault::sharedUserDefault()->getBoolForKey("isExist", false);
     if(isExist==false)
     {
+        CCUserDefault::sharedUserDefault()->setBoolForKey("isExist", true);
         CCUserDefault::sharedUserDefault()->setBoolForKey("soundEnabled", true);
         CCUserDefault::sharedUserDefault()->setIntegerForKey("topScore", 0);
         CCUserDefault::sharedUserDefault()->flush();

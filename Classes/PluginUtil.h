@@ -14,14 +14,17 @@
 enum MethodType{
     kPPdoSdkShowAds,
     kPPdoSdkHideAds,
-    kPPdoSdkShowScoreWall
+    kPPdoSdkShowScoreWall,
+    kPPdoSdkShowSpotAds
 };
 
 class PluginUtil
 {
 private:
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)    
     static JniMethodInfo minfo;
     static jobject obj;
+#endif
 public:
     static void init();
     static void invoke(MethodType key, std::string param="");
