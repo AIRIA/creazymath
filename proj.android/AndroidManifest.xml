@@ -20,34 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- 有米SDK添加必须的组件 -->
-        <activity
-	        android:name="net.youmi.android.AdBrowser"
-	        android:configChanges="keyboard|keyboardHidden|orientation|screenSize"            
-	        android:theme="@android:style/Theme.Light.NoTitleBar" >
-	    </activity>
-	    <service
-	        android:name="net.youmi.android.AdService"
-	        android:exported="false" >
-	    </service>
-	    <receiver 
-	        android:name="net.youmi.android.AdReceiver" >
-	        <intent-filter>
-	            <action android:name="android.intent.action.PACKAGE_ADDED" />
-	            <data android:scheme="package" />
-	        </intent-filter>
-	    </receiver> 
-	    
-	    <!-- 配置SmartBanner -->
-     	<activity
-		    android:name="net.youmi.android.SmartBannerActivity"
-		    android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-		    android:theme="@style/Transparent">        
-	    </activity>
-	    <service
-		    android:name="net.youmi.android.SmartBannerService"
-		    android:exported="false">        
-	    </service>
+        <!-- AdMob -->
+        <activity android:name="com.google.ads.AdActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
+   
     </application>
     <supports-screens android:largeScreens="true"
                       android:smallScreens="true"

@@ -1,6 +1,8 @@
 package com.giant.sdk;
 
-import net.youmi.android.AdManager;
+import com.giant.admob.AdsAdmob;
+import com.giant.admob.AdsWrapper;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -15,7 +17,6 @@ public class SdkManager implements ISdkManager {
 			_instance = new SdkManager();
 			Log.v(TAG, "instance init success");
 			mContext = PluginWrapper.getContext();
-			AdManager.getInstance(mContext).init("66792aaa9d9fa1ed", "c3694ea5cc8085e9", false);
 		}
 		return _instance;
 	}
@@ -26,7 +27,7 @@ public class SdkManager implements ISdkManager {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				YouMiSdk.showAds(mContext);
+				AdsAdmob.getInstance(mContext).showAds(AdsWrapper.ADS_TYPE_BANNER, AdsAdmob.ADMOB_SIZE_BANNER, AdsWrapper.POS_TOP);
 			}
 		});
 
@@ -46,7 +47,6 @@ public class SdkManager implements ISdkManager {
 
 			@Override
 			public void run() {
-				YouMiSdk.showWall(mContext);
 			}
 		});
 	}
@@ -56,7 +56,6 @@ public class SdkManager implements ISdkManager {
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				YouMiSdk.showSoptAds(mContext);
 			}
 		});
 	}
