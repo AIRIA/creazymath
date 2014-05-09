@@ -166,6 +166,7 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
 
 void GameScene::__showResult()
 {
+	__setMenuStatus(false);
     if (isOver==true) {
         CCLog("repeat show result");
         return;

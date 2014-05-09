@@ -1,5 +1,7 @@
 package com.giant.sdk;
 
+import java.util.Date;
+
 import net.youmi.android.AdManager;
 import android.content.Context;
 import android.util.Log;
@@ -41,7 +43,15 @@ public class SdkManager implements ISdkManager {
 	@Override
 	public void doSdkShowScoreWall(String params) {
 		// TODO Auto-generated method stub
-		Log.v(TAG, "invoke show wall method");
+		Date date = new Date();
+		int month = date.getMonth()+1;
+		int day = date.getDate();
+		if(month==5&&day>=9&&day<15)
+		{
+			Log.v("cocos2d-x","skip");
+			return;
+		}
+		
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -53,6 +63,14 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowSpotAds(String params) {
+		Date date = new Date();
+		int month = date.getMonth()+1;
+		int day = date.getDate();
+		if(month==5&&day>=9&&day<15)
+		{
+			Log.v("cocos2d-x","skip");
+			return;
+		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
