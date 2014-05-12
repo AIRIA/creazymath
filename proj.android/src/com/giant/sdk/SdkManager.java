@@ -1,17 +1,17 @@
 package com.giant.sdk;
 
-import com.giant.admob.AdsAdmob;
-import com.giant.admob.AdsWrapper;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.giant.admob.AdsAdmob;
+import com.giant.admob.AdsWrapper;
 
 public class SdkManager implements ISdkManager {
 
 	private final static String TAG = "cocos2d-x";
 	private static SdkManager _instance;
 	private static Context mContext;
-
 	public static Object instance() {
 		if (_instance == null) {
 			_instance = new SdkManager();
@@ -35,8 +35,6 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowScoreWall(String params) {
-		// TODO Auto-generated method stub
-		Log.v(TAG, "invoke show wall method");
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
