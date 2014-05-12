@@ -21,15 +21,14 @@ enum{
     kGameOverPanel
 };
 
-#define PP_GAME_OVER_TIME 0.6f
-#define PP_LABEL_TIME 0.3f
+#define PP_GAME_OVER_TIME 0.8f
+#define PP_LABEL_TIME 0.1f
 #define PP_LOGO_LAYER_SLIDE_TIME 0.3f
 
 void GameScene::onEnter()
 {
     BaseLayer::onEnter();
     __makeQuestion();
-    
 }
 
 bool GameScene::init()
@@ -146,9 +145,9 @@ void GameScene::__answerHandler(cocos2d::CCObject *pSender)
         /* 移动问题的位置 */
         CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
         CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(-PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
-        question->runAction(CCEaseBackInOut::create(moveQ));
+        question->runAction(moveQ);
         answer->runAction(CCSequence::create(
-                            CCEaseBackInOut::create(moveA),
+                            moveA,
                             CCCallFunc::create(this, callfunc_selector(GameScene::__makeQuestion)),
                             NULL
                             ));
@@ -244,7 +243,7 @@ void GameScene::__makeQuestion()
     a = rand()%range+1;
     b = rand()%range+1;
     right = a + b;
-    wrong = right+rand()%3;
+    wrong = right+rand()%2;
     result = right==wrong;
     
     char str[20];
@@ -257,9 +256,9 @@ void GameScene::__makeQuestion()
     
     CCActionInterval *moveQ = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2+50));
     CCActionInterval *moveA = CCMoveTo::create(PP_LABEL_TIME,ccp(PP_DESIGN_WIDTH/2, PP_DESIGN_HEIGHT/2-30));
-    question->runAction(CCEaseBackInOut::create(moveQ));
+    question->runAction(moveQ);
     answer->runAction(CCSequence::create(
-                CCEaseBackInOut::create(moveA),
+                moveA,
                 CCCallFunc::create(this, callfunc_selector(GameScene::__runProgressBar)),
                 NULL
                 ));
@@ -304,7 +303,7 @@ void GameScene::__restartHandler(cocos2d::CCObject *pSender)
                               CCDelayTime::create(PP_LOGO_LAYER_SLIDE_TIME),
                               CCMoveTo::create(PP_LOGO_LAYER_SLIDE_TIME, ccp(0,-s.height)),
                               CCCallFunc::create(pBackground, callfunc_selector(CCLayerColor::removeFromParent)),
-                              CCCallFunc::create(this, callfunc_selector(GameScene::__resetMenuStatus)),
+                              CCCallFunc::create(this, callfunc_selector(GameScene::__makeQuestion)),
                               NULL
                               )
                            );
@@ -322,11 +321,6 @@ void GameScene::__restartGame()
     removeChildByTag(kOverBackgroundLayer);
 }
 
-void GameScene::__resetMenuStatus()
-{
-    __makeQuestion();
-}
-
 void GameScene::__setMenuStatus(bool status)
 {
     if (status) {
@@ -335,5 +329,14 @@ void GameScene::__setMenuStatus(bool status)
         CCLog("-----disabled select menu");
     }
     CCMenu *answerMenu = (CCMenu*)m_pFooter->getChildByTag(kAnswerMenu);
+    CCArray *items = answerMenu->getChildren();
+    CCObject *obj = NULL;
+    answerMenu->setStatus(kCCMenuStateWaiting);
+    CCARRAY_FOREACH(items, obj)
+    {
+        CCMenuItemSprite *item = (CCMenuItemSprite*)obj;
+        item->unselected();
+        //item->activate();
+    }
     answerMenu->setTouchEnabled(status);
 }

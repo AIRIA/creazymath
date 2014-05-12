@@ -37,7 +37,6 @@ private:
     void __menuHandler(CCObject *pSender);
     void __restartHandler(CCObject *pSender);
     void __restartGame();
-    void __resetMenuStatus();
     void __timeup();
     void __setMenuStatus(bool status);
     
