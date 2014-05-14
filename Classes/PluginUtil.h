@@ -15,7 +15,8 @@ enum MethodType{
     kPPdoSdkShowAds,
     kPPdoSdkHideAds,
     kPPdoSdkShowScoreWall,
-    kPPdoSdkShowSpotAds
+    kPPdoSdkShowSpotAds,
+    kPPdoSdkShare
 };
 
 class PluginUtil

@@ -18,6 +18,7 @@ public class SdkManager implements ISdkManager {
 			Log.v(TAG, "instance init success");
 			mContext = PluginWrapper.getContext();
 			AdManager.getInstance(mContext).init("66792aaa9d9fa1ed", "c3694ea5cc8085e9", false);
+			UMengManager.init(mContext);
 		}
 		return _instance;
 	}
@@ -25,12 +26,13 @@ public class SdkManager implements ISdkManager {
 	@Override
 	public void doSdkShowAds(String params) {
 
+		
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
 		if(month==5&&day>12&&day<=14)
 		{
-			return;
+//			return;
 		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
@@ -84,5 +86,17 @@ public class SdkManager implements ISdkManager {
 				YouMiSdk.showSoptAds(mContext);
 			}
 		});
+	}
+
+	@Override
+	public void doSdkShare(final String params) {
+		PluginWrapper.runOnMainThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				UMengManager.instance().openShare(params);
+			}
+		});
+		
 	}
 }

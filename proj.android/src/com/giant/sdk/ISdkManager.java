@@ -9,4 +9,6 @@ public interface ISdkManager {
 	public void doSdkShowScoreWall(String params);
 	/* 展示插播广告 */
 	public void doSdkShowSpotAds(String params);
+	/* 分享app信息到社交网络 */
+	public void doSdkShare(String params);
 }
