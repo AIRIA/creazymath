@@ -39,7 +39,7 @@ private:
     void __restartGame();
     void __timeup();
     void __setMenuStatus(bool status);
-    
+    void __shareApp();
     std::vector<ccColor3B> colors;
     
 public:

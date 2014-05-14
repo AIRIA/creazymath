@@ -47,6 +47,8 @@ void PluginUtil::invoke(MethodType key, std::string param) {
     case kPPdoSdkShowSpotAds:
         methodName = "doSdkShowSpotAds";
         break;
+    case kPPdoSdkShare:
+    	methodName = "doSdkShare";
 	default:
 		break;
 	}

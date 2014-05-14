@@ -17,6 +17,7 @@ public class SdkManager implements ISdkManager {
 			_instance = new SdkManager();
 			Log.v(TAG, "instance init success");
 			mContext = PluginWrapper.getContext();
+			UMengManager.init(mContext);
 		}
 		return _instance;
 	}
@@ -35,6 +36,7 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowScoreWall(String params) {
+
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
@@ -45,10 +47,23 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowSpotAds(String params) {
+
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
 			}
 		});
+	}
+
+	@Override
+	public void doSdkShare(final String params) {
+		PluginWrapper.runOnMainThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				UMengManager.instance().openShare(params);
+			}
+		});
+		
 	}
 }

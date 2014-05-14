@@ -21,7 +21,7 @@ enum{
     kGameOverPanel
 };
 
-#define PP_GAME_OVER_TIME 0.8f
+#define PP_GAME_OVER_TIME 0.4f
 #define PP_LABEL_TIME 0.1f
 #define PP_LOGO_LAYER_SLIDE_TIME 0.3f
 
@@ -209,9 +209,12 @@ void GameScene::__showResult()
     resultNode->setPosition(VisibleRect::top()+ccp(0, 300));
     /* resultnode action */
     resultNode->runAction(
-            CCEaseBackInOut::create(
-                CCMoveTo::create(PP_GAME_OVER_TIME, VisibleRect::center())
-            )
+    		CCSequence::create(
+    				CCEaseBackInOut::create(
+                    CCMoveTo::create(PP_GAME_OVER_TIME, VisibleRect::center())
+    				),
+    				CCCallFunc::create(this,callfunc_selector(GameScene::__shareApp)),NULL
+    				)
     );
     resultNode->setTag(kGameOverPanel);
     
@@ -339,4 +342,17 @@ void GameScene::__setMenuStatus(bool status)
         //item->activate();
     }
     answerMenu->setTouchEnabled(status);
+}
+
+void GameScene::__shareApp()
+{
+	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
+	CCRenderTexture *render = CCRenderTexture::create(winSize.width,
+			winSize.height);
+	CCScene *runningScene = CCDirector::sharedDirector()->getRunningScene();
+	render->begin();
+	runningScene->visit();
+	render->end();
+	render->saveToFile("record.png", kCCImageFormatPNG);
+	PluginUtil::invoke(kPPdoSdkShare,CCFileUtils::sharedFileUtils()->getWritablePath()+"record.png");
 }
