@@ -24,7 +24,14 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowAds(String params) {
-		Log.v(TAG, "invoke show ads method");
+
+		Date date = new Date();
+		int month = date.getMonth()+1;
+		int day = date.getDate();
+		if(month==5&&day>12&&day<=14)
+		{
+			return;
+		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
@@ -46,7 +53,7 @@ public class SdkManager implements ISdkManager {
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
-		if(month==5&&day>=9&&day<15)
+		if(month==5&&day>=9&&day<=16)
 		{
 			Log.v("cocos2d-x","skip");
 			return;
@@ -66,7 +73,7 @@ public class SdkManager implements ISdkManager {
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
-		if(month==5&&day>=9&&day<15)
+		if(month==5&&day>=9&&day<=16)
 		{
 			Log.v("cocos2d-x","skip");
 			return;
