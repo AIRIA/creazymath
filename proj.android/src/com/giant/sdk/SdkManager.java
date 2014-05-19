@@ -30,9 +30,9 @@ public class SdkManager implements ISdkManager {
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
-		if(month==5&&day>12&&day<=14)
+		if(month==5&&day>18&&day<=22)
 		{
-//			return;
+			return;
 		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
@@ -55,9 +55,8 @@ public class SdkManager implements ISdkManager {
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
-		if(month==5&&day>=9&&day<=16)
+		if(month==5&&day>18&&day<=20)
 		{
-			Log.v("cocos2d-x","skip");
 			return;
 		}
 		
@@ -75,9 +74,8 @@ public class SdkManager implements ISdkManager {
 		Date date = new Date();
 		int month = date.getMonth()+1;
 		int day = date.getDate();
-		if(month==5&&day>=9&&day<=16)
+		if(month==5&&day>18&&day<=22)
 		{
-			Log.v("cocos2d-x","skip");
 			return;
 		}
 		PluginWrapper.runOnMainThread(new Runnable() {

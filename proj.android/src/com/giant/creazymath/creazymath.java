@@ -23,6 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.giant.creazymath;
 
+import net.youmi.android.AdManager;
+
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
@@ -42,6 +44,8 @@ public class creazymath extends Cocos2dxActivity{
     protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);	
 		PluginWrapper.init(this);
+		/* 开启用户统计功能 */
+		AdManager.getInstance(this).setUserDataCollect(true);
 	}
 
     public Cocos2dxGLSurfaceView onCreateView() {
