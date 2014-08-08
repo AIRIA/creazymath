@@ -23,11 +23,10 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.giant.creazymath;
 
-import net.youmi.android.AdManager;
-
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+import a.b.c.AdManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -36,8 +35,7 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.giant.sdk.PluginWrapper;
-import com.giant.sdk.UMengManager;
-import com.umeng.socialize.sso.UMSsoHandler;
+import com.umeng.message.PushAgent;
 
 public class creazymath extends Cocos2dxActivity{
 	private AlertDialog exitDialog;
@@ -46,6 +44,9 @@ public class creazymath extends Cocos2dxActivity{
 		PluginWrapper.init(this);
 		/* 开启用户统计功能 */
 		AdManager.getInstance(this).setUserDataCollect(true);
+		PushAgent mPushAgent = PushAgent.getInstance(this);
+		mPushAgent.enable();
+		PushAgent.getInstance(this).onAppStart();
 	}
 
     public Cocos2dxGLSurfaceView onCreateView() {
@@ -58,11 +59,6 @@ public class creazymath extends Cocos2dxActivity{
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        /**使用SSO授权必须添加如下代码 */
-        UMSsoHandler ssoHandler = UMengManager.instance().getController().getConfig().getSsoHandler(requestCode) ;
-        if(ssoHandler != null){
-           ssoHandler.authorizeCallBack(requestCode, resultCode, data);
-        }
     }
     
     @Override

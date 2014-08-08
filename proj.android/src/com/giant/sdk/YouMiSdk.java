@@ -1,11 +1,11 @@
 package com.giant.sdk;
 
-import net.youmi.android.banner.AdSize;
-import net.youmi.android.banner.AdView;
-import net.youmi.android.banner.AdViewListener;
-import net.youmi.android.diy.DiyManager;
-import net.youmi.android.spot.SpotDialogListener;
-import net.youmi.android.spot.SpotManager;
+import a.b.c.br.AdSize;
+import a.b.c.br.AdView;
+import a.b.c.br.AdViewListener;
+import a.b.c.diy.DiyManager;
+import a.b.c.st.SpotDialogListener;
+import a.b.c.st.SpotManager;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;

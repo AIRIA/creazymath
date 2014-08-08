@@ -217,16 +217,7 @@ void GameScene::__showResult()
     				)
     );
     resultNode->setTag(kGameOverPanel);
-    
-    /* 随机显示广告 */
-    if(rand()%7==0)
-    {
-        if (rand()%2==0) {
-            PluginUtil::invoke(kPPdoSdkShowSpotAds);
-        }else{
-            PluginUtil::invoke(kPPdoSdkShowScoreWall);
-        }
-    }
+    PluginUtil::invoke(kPPdoSdkShowSpotAds);
 }
 
 void GameScene::__makeQuestion()

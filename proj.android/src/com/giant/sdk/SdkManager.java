@@ -1,8 +1,9 @@
 package com.giant.sdk;
 
-import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import net.youmi.android.AdManager;
+import a.b.c.AdManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -11,6 +12,7 @@ public class SdkManager implements ISdkManager {
 	private final static String TAG = "cocos2d-x";
 	private static SdkManager _instance;
 	private static Context mContext;
+	private static boolean adsEnabled = false;
 
 	public static Object instance() {
 		if (_instance == null) {
@@ -18,7 +20,22 @@ public class SdkManager implements ISdkManager {
 			Log.v(TAG, "instance init success");
 			mContext = PluginWrapper.getContext();
 			AdManager.getInstance(mContext).init("66792aaa9d9fa1ed", "c3694ea5cc8085e9", false);
-			UMengManager.init(mContext);
+			
+			PluginWrapper.runOnMainThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					String res = NetManager.sendHttpRequest("https://gist.githubusercontent.com/AIRIA/b1dfdd28c31bd4be3389/raw/ads.json");
+					if(res!=null){
+						try {
+							JSONObject json = new JSONObject(res);
+							adsEnabled = json.getBoolean("isEnable");
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
 		}
 		return _instance;
 	}
@@ -26,18 +43,10 @@ public class SdkManager implements ISdkManager {
 	@Override
 	public void doSdkShowAds(String params) {
 
-		
-		Date date = new Date();
-		int month = date.getMonth()+1;
-		int day = date.getDate();
-		if(month==5&&day>18&&day<=22)
-		{
-			return;
-		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				YouMiSdk.showAds(mContext);
+			//	YouMiSdk.showAds(mContext);
 			}
 		});
 
@@ -52,36 +61,25 @@ public class SdkManager implements ISdkManager {
 	@Override
 	public void doSdkShowScoreWall(String params) {
 		// TODO Auto-generated method stub
-		Date date = new Date();
-		int month = date.getMonth()+1;
-		int day = date.getDate();
-		if(month==5&&day>18&&day<=20)
-		{
-			return;
-		}
-		
 		PluginWrapper.runOnMainThread(new Runnable() {
 
 			@Override
 			public void run() {
-				YouMiSdk.showWall(mContext);
+				if(adsEnabled){
+					YouMiSdk.showSoptAds(mContext);
+				}	
 			}
 		});
 	}
 
 	@Override
 	public void doSdkShowSpotAds(String params) {
-		Date date = new Date();
-		int month = date.getMonth()+1;
-		int day = date.getDate();
-		if(month==5&&day>18&&day<=22)
-		{
-			return;
-		}
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				YouMiSdk.showSoptAds(mContext);
+				if(adsEnabled){
+					YouMiSdk.showSoptAds(mContext);
+				}
 			}
 		});
 	}
@@ -92,7 +90,7 @@ public class SdkManager implements ISdkManager {
 			
 			@Override
 			public void run() {
-				UMengManager.instance().openShare(params);
+//				UMengManager.instance().openShare(params);
 			}
 		});
 		
