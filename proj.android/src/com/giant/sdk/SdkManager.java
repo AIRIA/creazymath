@@ -61,7 +61,7 @@ public class SdkManager implements ISdkManager {
 			
 			@Override
 			public void run() {
-				UMengManager.instance().openShare(params);
+//				UMengManager.instance().openShare(params);
 			}
 		});
 		

@@ -60,5 +60,7 @@ void PluginUtil::invoke(MethodType key, std::string param) {
 	}
 	jstring paramStr = minfo.env->NewStringUTF(param.c_str());
 	minfo.env->CallVoidMethod(obj, minfo.methodID, paramStr);
+//	jstring res = (jstring)minfo.env->CallObjectMethod(obj,minfo.methodID);
+
 #endif
 }

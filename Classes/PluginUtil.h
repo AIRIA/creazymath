@@ -22,7 +22,7 @@ enum MethodType{
 class PluginUtil
 {
 private:
-#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)    
+#if(CC_TARGET_PLATFORM==CC_PLATFORM_ANDROID)
     static JniMethodInfo minfo;
     static jobject obj;
 #endif
