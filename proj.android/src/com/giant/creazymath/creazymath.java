@@ -26,7 +26,6 @@ package com.giant.creazymath;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
-import a.b.c.AdManager;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -35,18 +34,12 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 
 import com.giant.sdk.PluginWrapper;
-import com.umeng.message.PushAgent;
 
 public class creazymath extends Cocos2dxActivity{
 	private AlertDialog exitDialog;
     protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);	
 		PluginWrapper.init(this);
-		/* 开启用户统计功能 */
-		AdManager.getInstance(this).setUserDataCollect(true);
-		PushAgent mPushAgent = PushAgent.getInstance(this);
-		mPushAgent.enable();
-		PushAgent.getInstance(this).onAppStart();
 	}
 
     public Cocos2dxGLSurfaceView onCreateView() {

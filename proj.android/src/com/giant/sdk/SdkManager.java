@@ -3,9 +3,13 @@ package com.giant.sdk;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import a.b.c.AdManager;
+import y.u.w.Ywaf;
+import y.u.w.st.Ywbv;
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+
+import com.umeng.message.PushAgent;
 
 public class SdkManager implements ISdkManager {
 
@@ -13,15 +17,18 @@ public class SdkManager implements ISdkManager {
 	private static SdkManager _instance;
 	private static Context mContext;
 	private static boolean adsEnabled = false;
+	private static Activity mActivity;
+	private static int num = 0;
 
 	public static Object instance() {
 		if (_instance == null) {
 			_instance = new SdkManager();
 			Log.v(TAG, "instance init success");
 			mContext = PluginWrapper.getContext();
-			AdManager.getInstance(mContext).init("66792aaa9d9fa1ed", "c3694ea5cc8085e9", false);
+			Ywaf.getInstance(mContext).init("66792aaa9d9fa1ed", "c3694ea5cc8085e9", false);
 			
-			PluginWrapper.runOnMainThread(new Runnable() {
+			mActivity = (Activity) mContext;
+			mActivity.runOnUiThread(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -29,7 +36,15 @@ public class SdkManager implements ISdkManager {
 					if(res!=null){
 						try {
 							JSONObject json = new JSONObject(res);
-							adsEnabled = json.getBoolean("isEnable");
+							adsEnabled = json.getBoolean("2.2");
+							if(adsEnabled){
+								/* 开启用户统计功能 */
+//								Ywaf.getInstance(mActivity).setUserDataCollect(true);
+								PushAgent mPushAgent = PushAgent.getInstance(mActivity);
+								mPushAgent.enable();
+								PushAgent.getInstance(mActivity).onAppStart();
+								Ywbv.uax(mActivity).ubj();
+							}
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -60,13 +75,14 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowScoreWall(String params) {
+		num++;
 		// TODO Auto-generated method stub
 		PluginWrapper.runOnMainThread(new Runnable() {
-
+			
 			@Override
 			public void run() {
-				if(adsEnabled){
-					YouMiSdk.showSoptAds(mContext);
+				if(adsEnabled&&num%5==0){
+					Ywbv.uax(mContext).ucs(mContext);
 				}	
 			}
 		});
@@ -74,11 +90,12 @@ public class SdkManager implements ISdkManager {
 
 	@Override
 	public void doSdkShowSpotAds(String params) {
+		num++;
 		PluginWrapper.runOnMainThread(new Runnable() {
 			@Override
 			public void run() {
-				if(adsEnabled){
-					YouMiSdk.showSoptAds(mContext);
+				if(adsEnabled&&num%5==0){
+					Ywbv.uax(mContext).ucs(mContext);
 				}
 			}
 		});
